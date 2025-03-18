@@ -1,1 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        textarea, input[type="file"], button {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .output {
+            margin-top: 20px;
+        }
+        .copy-button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .copy-button:hover {
+            background-color: #218838;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text Summarization</h1>
+        <form action="/generate_summary" method="post" enctype="multipart/form-data">
+            <textarea name="user_input" placeholder="Enter or paste your text here..." rows="6"></textarea>
+            <input type="file" name="file" accept=".txt">
+            
+            <h3>Select Summary Type:</h3>
+            <label>
+                <input type="radio" name="summary_type" value="extractive" required> Extractive Summary
+            </label>
+            <label>
+                <input type="radio" name="summary_type" value="abstractive"> Abstractive Summary
+            </label>
+            
+            <button type="submit">Generate Summary</button>
+        </form>
+        
+        {% if original_text %}
+        <div class="output">
+            <h3>Original Text:</h3>
+            <p>{{ original_text }}</p>
+        </div>
+        <div class="output">
+            <h3>Generated Summary:</h3>
+            <p>{{ generated_summary }}</p>
+            <button class="copy-button" onclick="copySummary()">Copy Summary</button>
+        </div>
+        {% endif %}
+        
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+    <script>
+        function copySummary() {
+            const summary = document.querySelector(".output p:nth-of-type(2)").innerText;
+            navigator.clipboard.writeText(summary).then(() => {
+                alert("Summary copied to clipboard!");
+            });
+        }
+    </script>
+</body>
+</html>
 
